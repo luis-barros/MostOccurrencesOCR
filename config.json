@@ -1,0 +1,11 @@
+{
+  "path": "D:\\pdf",
+  "archPath": "D:\\pdf\\archive",
+  "host": "http://community.cyrius.it",
+  "port": 9008,
+  "group": "5f76dbae57afba956a3709cb",
+  "assetsPath": "test",
+  "assetsURL": "test",
+  "user": "l.barros@cyrius.it",
+  "pwd": "l.barros@cyrius.it"
+}
