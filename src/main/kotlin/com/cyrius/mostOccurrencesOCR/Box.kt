@@ -21,7 +21,7 @@ class Box(val name: String, val config: LocalFileConfiguration, val file: File, 
         val imgDrop : java.util.HashMap<String, Any> = java.util.HashMap()
         imgDrop["room"] = "group"
         val data: java.util.HashMap<String, Any> = java.util.HashMap()
-        data["type"] = file.name
+        data["type"] = "ORIGINALFILE"
         data["value"] = "${config.configuration.assetsURL}/${file.name}"
         imgDrop["data"] = data
 

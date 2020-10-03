@@ -7,5 +7,7 @@
   "assetsPath": "test",
   "assetsURL": "test",
   "user": "l.barros@cyrius.it",
-  "pwd": "l.barros@cyrius.it"
+  "pwd": "l.barros@cyrius.it",
+  "dpi": "",
+  "languages": ""
 }
