@@ -3,17 +3,53 @@ package com.cyrius.mostOccurrencesOCR
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import net.sourceforge.tess4j.Tesseract
+import net.sourceforge.tess4j.util.LoadLibs
 import java.io.File
 
-val config: ConfigFile = jacksonObjectMapper().readValue(File("./config.json"))
-val tesseract = tesseractFactory(config.dpi,
-		config.languages,
-		config.tessDataPath)
+val config: ConfigFile = jacksonObjectMapper().readValue("./config.json")
 
 fun main() {
+
+	val tesseract = tesseractFactory(config.dpi,
+			config.languages,
+			config.tessDataPath)
+
 	while(true) {
-		moveToProcPath()
-		processFile()
+		copyToProc()
+		processFiles(tesseract)
+	}
+}
+
+private fun processFiles(tesseract: Tesseract) {
+	File(config.procPath).listFiles()?.forEach { file ->
+		if (file.isFile) {
+			println("File name: $file")
+			try {
+				val map = tesseract
+						.doOCR(file)
+						.split(" ")
+						.groupingBy { word ->
+							config.valuesToEliminate.forEach(){ toEliminate ->
+								word.replace(toEliminate, "")
+							}
+							word.toLowerCase()
+						}
+						.eachCount()
+				println(map.toList().sortedBy { (_, value) -> value }.toMap())
+				val filteredMap = map.filter { (word, value) ->
+					value > config.threshold_count
+							&& word.length > config.threshold_length
+				}
+				val box = Box(file.nameWithoutExtension, file, filteredMap.keys.toList())
+				BoxesAPIClient()
+						.auth(config)
+						.createBox(config, box)
+				file.copyTo(File("${config.archPath}${File.separator}${file.name}"), true)
+				file.delete()
+			} catch (e: Exception) {
+				e.printStackTrace()
+			}
+		}
 	}
 }
 
@@ -25,44 +61,13 @@ private fun tesseractFactory(dpi: String, languages: String, tessDataPath: Strin
 	return tesseract
 }
 
-private fun moveToProcPath() {
+private fun copyToProc() {
 	File(config.inPath).listFiles()?.forEach{ file ->
 		if(file.isFile) {
 			Thread.sleep(2000)
-			if(file.lastModified() == File(file.path)?.lastModified()){
+			if(file.lastModified() == File(file.path).lastModified()){
 				file.copyTo(File("${config.procPath}${File.separator}${file.name}"), true)
 				file.delete()
-			}
-		}
-	}
-}
-
-private fun processFile() {
-	File(config.procPath).listFiles()?.forEach { file ->
-		if(file.isFile) {
-			println("File name: $file")
-			try {
-				val map = tesseract
-						.doOCR(file)
-						.split(" ")
-						.groupingBy { word ->
-							config.valuesToEliminate.forEach() { toEliminate ->
-								word.replace(toEliminate, "")
-							}
-							word.toLowerCase()
-						}
-						.eachCount()
-				println(map.toList().sortedBy{(_,value) -> value}.toMap())
-				val filteredMap = map.filter { (word, value) -> value > config.threshold_count
-						&& word.length > config.threshold_length }
-				val box = Box(file.nameWithoutExtension, file, filteredMap.keys.toList())
-				BoxesAPIClient()
-						.auth()
-						.createBox(box)
-				file.copyTo(File("${config.archPath}${File.separator}${file.name}"), true)
-				file.delete()
-			} catch (e: Exception) {
-				e.printStackTrace()
 			}
 		}
 	}
