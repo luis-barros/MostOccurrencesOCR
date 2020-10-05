@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import java.io.File
 
 
-class Box(val name: String, val config: LocalFileConfiguration, val file: File, val tags: List<String>){
-    private val groups: List<String> = mutableListOf<String>(config.configuration.group)
+class Box(val name: String, val file: File, val tags: List<String>){
+    private val groups: List<String> = mutableListOf<String>(config.group)
     val drops: List<Any> = calcDrops()
     fun serializeMap() : String{
         val map: HashMap<String, Any> = HashMap()
@@ -22,7 +22,7 @@ class Box(val name: String, val config: LocalFileConfiguration, val file: File, 
         imgDrop["room"] = "group"
         val data: java.util.HashMap<String, Any> = java.util.HashMap()
         data["type"] = "ORIGINALFILE"
-        data["value"] = "${config.configuration.assetsURL}/${file.name}"
+        data["value"] = "${config.assetsURL}/${file.name}"
         imgDrop["data"] = data
 
         val docDrop: java.util.HashMap<String, Any> = java.util.HashMap()
