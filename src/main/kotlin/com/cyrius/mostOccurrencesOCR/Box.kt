@@ -4,7 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import java.io.File
 
 
-class Box(val name: String,  val file: File, val tags: List<String>){
+
+class Box(val name: String, val file: File, val tags: List<String>){
     private val groups: List<String> = mutableListOf<String>(config.group)
     val drops: List<Any> = calcDrops()
     fun serializeMap() : String{
