@@ -17,7 +17,7 @@ fun main(args: Array<String>) {
 	while(true) {
 		File(config.configuration.inPath).listFiles()?.forEach{ file ->
 			if(file.isFile) {
-				Thread.sleep(500)
+				Thread.sleep(2000)
 				if(file.lastModified() == File(file.path).lastModified()){
 					file.copyTo(File("${config.configuration.procPath}${File.separator}${file.name}"), true)
 					file.delete()
