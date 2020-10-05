@@ -1,9 +1,11 @@
 package com.cyrius.mostOccurrencesOCR
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import net.sourceforge.tess4j.Tesseract
 import java.io.File
 
-val config = LocalFileConfiguration("./config.json").configuration
+val config: ConfigFile = jacksonObjectMapper().readValue(File("./config.json"))
 val tesseract = tesseractFactory(config.dpi,
 		config.languages,
 		config.tessDataPath)
@@ -27,7 +29,7 @@ private fun moveToProcPath() {
 	File(config.inPath).listFiles()?.forEach{ file ->
 		if(file.isFile) {
 			Thread.sleep(2000)
-			if(file.lastModified() == File(file.path).lastModified()){
+			if(file.lastModified() == File(file.path)?.lastModified()){
 				file.copyTo(File("${config.procPath}${File.separator}${file.name}"), true)
 				file.delete()
 			}
@@ -44,7 +46,7 @@ private fun processFile() {
 						.doOCR(file)
 						.split(" ")
 						.groupingBy { word ->
-							config.valueToEliminate.forEach() { toEliminate ->
+							config.valuesToEliminate.forEach() { toEliminate ->
 								word.replace(toEliminate, "")
 							}
 							word.toLowerCase()
