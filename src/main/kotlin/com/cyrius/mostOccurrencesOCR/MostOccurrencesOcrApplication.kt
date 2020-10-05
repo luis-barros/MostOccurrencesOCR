@@ -41,8 +41,8 @@ private fun processFiles(tesseract: Tesseract) {
 				}
 				val box = Box(file.nameWithoutExtension, file, filteredMap.keys.toList())
 				BoxesAPIClient()
-						.auth(config)
-						.createBox(config, box)
+						.auth()
+						.createBox(box)
 				file.copyTo(File("${config.archPath}${File.separator}${file.name}"), true)
 				file.delete()
 			} catch (e: Exception) {
