@@ -32,9 +32,11 @@ fun main(args: Array<String>) {
 							.doOCR(file)
 							.split(" ")
 							.groupingBy { word ->
+								config.configuration.valueToEliminate.forEach() { toEliminate ->
+									word.replace(toEliminate, "")
+								}
 								word.toLowerCase()
-										.replace(".", "")
-										.replace(",", "")}
+							}
 							.eachCount()
 					println(map.toList().sortedBy{(_,value) -> value}.toMap())
 					val filteredMap = map.filter { (word, value) -> value > config.configuration.threshold_count
