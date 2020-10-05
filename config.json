@@ -9,5 +9,15 @@
   "user": "l.barros@cyrius.it",
   "pwd": "l.barros@cyrius.it",
   "dpi": "",
-  "languages": ""
+  "languages": "",
+  "threshold_length": 3,
+  "threshold_count": 3,
+  "tessDataPath": "./tesseract",
+  "valuesToElminate": [
+    ".",
+    ",",
+    "-",
+    ">",
+    "<"
+  ]
 }
