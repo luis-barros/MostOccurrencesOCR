@@ -5,7 +5,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import net.sourceforge.tess4j.Tesseract
 import java.io.File
 
-val config: ConfigFile = jacksonObjectMapper().readValue("./config.json")
+val config: ConfigFile = jacksonObjectMapper().readValue(File("./config.json"))
 
 fun main() {
 
