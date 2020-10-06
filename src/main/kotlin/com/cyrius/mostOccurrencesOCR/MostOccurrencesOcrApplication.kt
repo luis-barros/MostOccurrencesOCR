@@ -5,6 +5,11 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import net.sourceforge.tess4j.Tesseract
 import java.io.File
 
+data class ConfigFile(val inPath: String, val archPath: String, val host: String, val port: String,
+					  val group: String, val assetsPath: String, val assetsURL: String, val user: String,
+					  val pwd: String, val procPath: String, val dpi: String, val languages: String, val threshold_length: Int,
+					  val threshold_count: Int, val tessDataPath: String, val valuesToEliminate: List<String>)
+
 val config: ConfigFile = jacksonObjectMapper().readValue(File("./config.json"))
 
 fun main() {
